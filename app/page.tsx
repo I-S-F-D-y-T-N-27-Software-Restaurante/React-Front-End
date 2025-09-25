@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Navbar from '@/components/navbar'
 
 
-export default function Home() {
+export default function Inicio() {
   return (
     <>
     <Navbar />
@@ -11,7 +11,7 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-40 gap-y-10 justify-items-center">
             <Link href="/pedidos" className="block">
               <div
-                className="w-80 h-80 rounded-md shadow-md flex items-center justify-center select-none bg-[#dcdc2a] hover:brightness-95 transition-all cursor-pointer"
+                className="w-100 h-80 rounded-md shadow-md flex items-center justify-center select-none bg-[#dcdc2a] hover:brightness-95 transition-all cursor-pointer"
                 role="button"
               >
                 <span className="text-white font-extrabold text-3xl tracking-wider uppercase">
@@ -22,7 +22,7 @@ export default function Home() {
 
             <Link href="/mesas" className="block" >
               <div
-                className=" w-80 h-80  rounded-md shadow-md flex items-center justify-center select-none bg-[#dcdc2a] hover:brightness-95 transition-all cursor-pointer"
+                className=" w-100 h-80  rounded-md shadow-md flex items-center justify-center select-none bg-[#dcdc2a] hover:brightness-95 transition-all cursor-pointer"
                 role="button"
               >
                 <span className="text-white font-extrabold text-3xl tracking-wider uppercase">
@@ -33,7 +33,7 @@ export default function Home() {
 
             <Link href="/inventario" className="block">
             <div
-              className="w-80 h-80  rounded-md shadow-md flex items-center justify-center select-none bg-[#dcdc2a] hover:brightness-95 transition-all cursor-pointer"
+              className="w-100 h-80  rounded-md shadow-md flex items-center justify-center select-none bg-[#dcdc2a] hover:brightness-95 transition-all cursor-pointer"
               role="button"
             >
               <span className="text-white font-extrabold text-3xl tracking-wider uppercase">
@@ -44,7 +44,7 @@ export default function Home() {
 
           <Link href="/usuarios" className="block">
             <div
-              className="w-80 h-80  rounded-md shadow-md flex items-center justify-center select-none bg-[#dcdc2a] hover:brightness-95 transition-all cursor-pointer"
+              className="w-100 h-80  rounded-md shadow-md flex items-center justify-center select-none bg-[#dcdc2a] hover:brightness-95 transition-all cursor-pointer"
               role="button"
             >
               <span className="text-white font-extrabold text-3xl tracking-wider uppercase">
