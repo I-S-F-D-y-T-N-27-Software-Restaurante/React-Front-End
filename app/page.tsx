@@ -1,11 +1,10 @@
-import Link from 'next/link'
-import Navbar from '@/components/navbar'
-
+import Link from "next/link";
+import Navbar from "@/components/navbar";
 
 export default function Inicio() {
   return (
     <>
-    <Navbar />
+      <Navbar />
       <main className="min-h-screen bg-white flex items-center justify-center align-center">
         <div className="w-full max-w-5xl px-5 py-20">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-40 gap-y-10 justify-items-center">
@@ -54,7 +53,6 @@ export default function Inicio() {
           </Link>
         </div>
       </div>
-    </main>
-  </>
-  )
+    </Link>
+  );
 }
