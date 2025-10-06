@@ -18,32 +18,28 @@ export default function Navbar() {
             className="hover:text-gray-300 flex items-center gap-1"
           >
             <Users className="w-6 h-6 md:w-8 md:h-8" />
-            <span className="hidden md:inline text-lg">
-              GESTION DE USUARIOS
-            </span>
+            <span className="hidden md:inline text-lg">USUARIOS</span>
           </Link>
           <Link
             href="/mesas"
             className="hover:text-gray-300 flex items-center gap-1"
           >
             <Table className="w-6 h-6 md:w-8 md:h-8" />
-            <span className="hidden md:inline text-lg">GESTION DE MESAS</span>
+            <span className="hidden md:inline text-lg">MESAS</span>
           </Link>
           <Link
             href="/pedidos"
             className="hover:text-gray-300 flex items-center gap-1"
           >
             <ClipboardList className="w-6 h-6 md:w-8 md:h-8" />
-            <span className="hidden md:inline text-lg">GESTION DE PEDIDOS</span>
+            <span className="hidden md:inline text-lg">PEDIDOS</span>
           </Link>
           <Link
             href="/inventario"
             className="hover:text-gray-300 flex items-center gap-1"
           >
             <Box className="w-6 h-6 md:w-8 md:h-8" />
-            <span className="hidden md:inline text-lg">
-              GESTION DE INVENTARIO
-            </span>
+            <span className="hidden md:inline text-lg">INVENTARIO</span>
           </Link>
         </div>
         <div className="flex items-center mr-4 md:mr-10">

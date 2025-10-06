@@ -1,44 +1,51 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
+import { useState } from "react";
 
 type Table = {
-  id: number
-  number: number
-  status: 'Libre' | 'Ocupado'
-  waiter?: string
-  items?: string[]
-}
+  id: number;
+  number: number;
+  status: "Libre" | "Ocupado";
+  waiter?: string;
+  items?: string[];
+};
 
 const initialTables: Table[] = [
-  { id: 1, number: 1, status: 'Libre', items: [] },
-  { id: 2, number: 2, status: 'Ocupado', items: [] },
-  { id: 3, number: 3, status: 'Libre', items: [] },
-]
+  { id: 1, number: 1, status: "Libre", items: [] },
+  { id: 2, number: 2, status: "Ocupado", items: [] },
+  { id: 3, number: 3, status: "Libre", items: [] },
+];
 
-const waiters = ['Juan', 'Maria', 'Carlos', 'Ana']
+const waiters = ["Juan", "Maria", "Carlos", "Ana"];
 
 export default function TablesGrid() {
-  const [tables, setTables] = useState<Table[]>(initialTables)
-  const [selectedTable, setSelectedTable] = useState<Table | null>(null)
+  const [tables, setTables] = useState<Table[]>(initialTables);
+  const [selectedTable, setSelectedTable] = useState<Table | null>(null);
 
   const handleClick = (table: Table) => {
-    setSelectedTable(table)
-  }
+    setSelectedTable(table);
+  };
 
-  const closePopup = () => setSelectedTable(null)
+  const closePopup = () => setSelectedTable(null);
 
   const addTable = () => {
-    const nextNumber = tables.length > 0 ? Math.max(...tables.map(t => t.number)) + 1 : 1
-    const nextId = tables.length > 0 ? Math.max(...tables.map(t => t.id)) + 1 : 1
-    const newTable: Table = { id: nextId, number: nextNumber, status: 'Libre', items: [] }
-    setTables([...tables, newTable])
-  }
+    const nextNumber =
+      tables.length > 0 ? Math.max(...tables.map((t) => t.number)) + 1 : 1;
+    const nextId =
+      tables.length > 0 ? Math.max(...tables.map((t) => t.id)) + 1 : 1;
+    const newTable: Table = {
+      id: nextId,
+      number: nextNumber,
+      status: "Libre",
+      items: [],
+    };
+    setTables([...tables, newTable]);
+  };
 
   const updateTable = (updated: Table) => {
-    setTables(tables.map(t => (t.id === updated.id ? updated : t)))
-    setSelectedTable(updated)
-  }
+    setTables(tables.map((t) => (t.id === updated.id ? updated : t)));
+    setSelectedTable(updated);
+  };
 
   return (
     <div className="p-4">
@@ -47,16 +54,16 @@ export default function TablesGrid() {
           <div
             key={table.id}
             className={`p-24 rounded-lg cursor-pointer text-center text-white
-              ${table.status === 'Libre' ? 'bg-green-500' : 'bg-red-500'}`}
+              ${table.status === "Libre" ? "bg-green-500" : "bg-red-500"}`}
             onClick={() => handleClick(table)}
           >
-            <div>Mesa {table.number}</div>
-            <div>{table.status}</div>
+            <div className="text-lg font-semibold">Mesa {table.number}</div>
+            <div className="text-sm">{table.status}</div>
           </div>
         ))}
 
         <div
-          className="p-6 rounded-lg bg-gray-400 cursor-pointer text-center text-white flex items-center justify-center"
+          className="p-24 rounded-lg bg-gray-400 cursor-pointer text-center text-white flex items-center justify-center border-2 border-dashed border-gray-600 hover:bg-gray-500 transition"
           onClick={addTable}
         >
           Add table
@@ -71,32 +78,33 @@ export default function TablesGrid() {
         />
       )}
     </div>
-  )
+  );
 }
 
 type TablePopupProps = {
-  table: Table
-  onClose: () => void
-  onUpdate: (table: Table) => void
-}
+  table: Table;
+  onClose: () => void;
+  onUpdate: (table: Table) => void;
+};
 
 function TablePopup({ table, onClose, onUpdate }: TablePopupProps) {
-  const [status, setStatus] = useState<'Libre' | 'Ocupado'>(table.status)
-  const [waiter, setWaiter] = useState(table.waiter || '')
-  const [itemInput, setItemInput] = useState('')
-  const [items, setItems] = useState<string[]>(table.items || [])
+  const [status, setStatus] = useState<"Libre" | "Ocupado">(table.status);
+  const [waiter, setWaiter] = useState(table.waiter || "");
+  const [itemInput, setItemInput] = useState("");
+  const [items, setItems] = useState<string[]>(table.items || []);
 
-  const toggleStatus = () => setStatus(status === 'Libre' ? 'Ocupado' : 'Libre')
+  const toggleStatus = () =>
+    setStatus(status === "Libre" ? "Ocupado" : "Libre");
   const addItem = () => {
-    if (itemInput.trim() === '') return
-    const newItems = [...items, itemInput.trim()]
-    setItems(newItems)
-    setItemInput('')
-  }
+    if (itemInput.trim() === "") return;
+    const newItems = [...items, itemInput.trim()];
+    setItems(newItems);
+    setItemInput("");
+  };
 
   const saveChanges = () => {
-    onUpdate({ ...table, status, waiter, items })
-  }
+    onUpdate({ ...table, status, waiter, items });
+  };
 
   return (
     <div className="fixed inset-0 bg-black/80  flex items-center justify-center z-50">
@@ -108,7 +116,7 @@ function TablePopup({ table, onClose, onUpdate }: TablePopupProps) {
           <button
             onClick={toggleStatus}
             className={`px-4 py-2 rounded text-white ${
-              status === 'Libre' ? 'bg-green-500' : 'bg-red-500'
+              status === "Libre" ? "bg-green-500" : "bg-red-500"
             }`}
           >
             {status}
@@ -124,7 +132,9 @@ function TablePopup({ table, onClose, onUpdate }: TablePopupProps) {
           >
             <option value="">Select waiter</option>
             {waiters.map((w) => (
-              <option key={w} value={w}>{w}</option>
+              <option key={w} value={w}>
+                {w}
+              </option>
             ))}
           </select>
         </div>
@@ -174,5 +184,5 @@ function TablePopup({ table, onClose, onUpdate }: TablePopupProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -6,7 +6,7 @@ type User = {
   id: number;
   name: string;
   email: string;
-  role:  "Camarero" | "Cocinero" | "Invitado";
+  role: "Camarero" | "Cocinero" | "Invitado";
 };
 
 const mockUsers: User[] = [
@@ -24,25 +24,27 @@ export default function UsersView() {
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-6">Usuarios</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div className="p-8 min-h-screen">
+      <h1 className="text-3xl font-bold mb-8 text-white">Usuarios</h1>
+      <div className="flex flex-wrap gap-8 mt-24 m-auto">
         {users.map((user) => (
           <div
             key={user.id}
-            className="rounded-lg shadow p-4 flex flex-col gap-2"
+            className="min-w-[320px] bg-black/96 rounded-xl shadow-lg p-5 flex flex-col gap-4 hover:shadow-xl transition-shadow duration-300"
           >
-            <h2 className="font-semibold text-lg truncate">{user.name}</h2>
-            <p className="text-gray-600 truncate">{user.email}</p>
+            <h2 className="font-semibold text-xl text-white truncate">
+              {user.name}
+            </h2>
+            <p className="text-gray-400 truncate">{user.email}</p>
 
-            <div className="flex flex-col mt-2">
-              <label className="mb-1 font-medium">Rol</label>
+            <div className="flex flex-col mt-3">
+              <label className="mb-2 font-medium text-gray-200">Rol</label>
               <select
                 value={user.role}
                 onChange={(e) =>
                   handleRoleChange(user.id, e.target.value as User["role"])
                 }
-                className="border rounded px-2 py-1"
+                className="bg-gray-700 text-white border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               >
                 <option value="Admin">Admin</option>
                 <option value="Camarero">Camarero</option>
