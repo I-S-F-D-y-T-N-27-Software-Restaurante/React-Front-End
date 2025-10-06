@@ -1,13 +1,13 @@
 import Link from "next/link";
-import Navbar from "@/components/navbar";
-import Mesa from "@/components/mesas";
+import { Navbar } from "@/components/Navbar";
+import { RestaurantTable } from "@/components/Mesas";
 
 export default function Home() {
   return (
     <>
       <Navbar />
       <main className="min-h-screen bg-white flex items-center justify-center align-center flex-col">
-        <Mesa/>
+        <RestaurantTable />
       </main>
     </>
   );

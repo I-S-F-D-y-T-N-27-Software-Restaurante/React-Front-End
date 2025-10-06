@@ -16,7 +16,7 @@ const mockUsers: User[] = [
   { id: 4, name: "Ana Lopez", email: "ana@example.com", role: "Invitado" },
 ];
 
-export default function UsersView() {
+export function UsersView() {
   const [users, setUsers] = useState<User[]>(mockUsers);
 
   const handleRoleChange = (id: number, newRole: User["role"]) => {

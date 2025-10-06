@@ -1,7 +1,11 @@
+"use client"
 import Link from "next/link";
 import { User, Home, Users, Table, ClipboardList, Box } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { logOut } from "../lib/auth";
+import { UserMenu } from "./UserMenu";
 
-export default function Navbar() {
+export function Navbar() {
   return (
     <nav className="w-full bg-black text-white shadow-md p-2">
       <div className="flex justify-between items-center h-14">
@@ -42,14 +46,8 @@ export default function Navbar() {
             <span className="hidden md:inline text-lg">INVENTARIO</span>
           </Link>
         </div>
-        <div className="flex items-center mr-4 md:mr-10">
-          <Link
-            href="/perfil"
-            className="p-2 rounded-full bg-purple-200 hover:bg-purple-300"
-          >
-            <User className="w-7 h-7 md:w-9 md:h-9 text-purple-700" />
-          </Link>
-        </div>
+
+        <UserMenu />
       </div>
     </nav>
   );
