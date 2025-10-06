@@ -18,7 +18,7 @@ const initialTables: Table[] = [
 
 const waiters = ["Juan", "Maria", "Carlos", "Ana"];
 
-export default function TablesGrid() {
+export function RestaurantTable() {
   const [tables, setTables] = useState<Table[]>(initialTables);
   const [selectedTable, setSelectedTable] = useState<Table | null>(null);
 
