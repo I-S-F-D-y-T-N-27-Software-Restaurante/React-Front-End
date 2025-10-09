@@ -1,9 +1,10 @@
-"use client"
+"use client";
 import Link from "next/link";
 import { User, Home, Users, Table, ClipboardList, Box } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { logOut } from "../lib/auth";
 import { UserMenu } from "./UserMenu";
+import RoleGuard from "../lib/roleGuard";
 
 export function Navbar() {
   return (

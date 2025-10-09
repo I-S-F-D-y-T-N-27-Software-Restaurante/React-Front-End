@@ -1,20 +1,22 @@
-
 "use client";
 
 import Link from "next/link";
 import { User, Home, Users, Table, ClipboardList, Box } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { logOut } from "../lib/auth";
+import { apiFetch, logOut } from "../lib/auth";
 import { useRouter } from "next/navigation";
+// import { useFetchMe } from "../lib/useFetchMe";
 
 export function UserMenu() {
   const [open, setOpen] = useState(false);
+  // const { user, loading, error } = useFetchMe();
   const menuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
   const user = {
-    name: "John Doe",
+    id: "1",
     email: "john.doe@example.com",
+    roles: ["waiter"],
   };
 
   useEffect(() => {
@@ -39,8 +41,26 @@ export function UserMenu() {
       {open && (
         <div className="absolute right-0 top-12 bg-white shadow-lg rounded-md w-60 py-4 px-4 z-50">
           <div className="flex flex-col items-start text-gray-800">
-            <div className="font-semibold text-lg truncate">{user.name}</div>
-            <div className="text-sm text-gray-500 truncate">{user.email}</div>
+            <div className="font-semibold text-lg truncate">
+              {/* {user && user.user_id} */}
+              User ID {user.id}
+            </div>
+            <div className="text-sm text-gray-500 truncate my-1">
+              {/* {user && user.user_email} */}
+              {user.email}
+            </div>
+            <div className="text-sm text-gray-500 my-2">
+              <div className="flex flex-wrap gap-2">
+                {user.roles?.map((role, index) => (
+                  <span
+                    key={index}
+                    className="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-800 font-medium capitalize"
+                  >
+                    {role.toLowerCase().replace("_", " ")}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
 
           <div className="border-t border-gray-200 my-3"></div>
@@ -51,7 +71,7 @@ export function UserMenu() {
                 console.log("Cerrar sesión");
                 setOpen(false);
                 const res = await logOut();
-                console.log(res)
+                console.log(res);
                 router.push("/login");
               } catch (err: any) {
                 console.log(err.message);

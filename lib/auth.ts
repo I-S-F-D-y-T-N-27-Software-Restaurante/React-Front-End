@@ -6,39 +6,70 @@ export interface LoginResponse {
   roles: string[];
 }
 
-export async function login(
-  email: string,
-  password: string
-): Promise<LoginResponse> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/login`, {
+export async function apiFetch(path: RequestInfo, init: RequestInit = {}) {
+  const uri = `${process.env.NEXT_PUBLIC_API_URL}${path}`;
+
+  try {
+    const res = await fetch(uri, {
+      ...init,
+      headers: {
+        "Content-Type": "application/json",
+        ...init.headers,
+      },
+      credentials: "include",
+    });
+
+    if (res.status === 401) {
+      window.location.href = "/login";
+      return res;
+    }
+
+    if (res.status === 403) {
+      window.location.href = "/";
+      return;
+    }
+
+    return res;
+  } catch (error) {
+    console.error("error at apiFetch: ", error);
+  }
+}
+
+export async function login(email: string, password: string) {
+  const init: RequestInit = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ email, password }),
-    credentials: "include",
-  });
+  };
 
-  if (!res.ok) {
-    const errorData = await res.json();
-    throw new Error(errorData.detail || "Login failed");
+  try {
+    const res = await apiFetch("/users/login", init);
+
+    if (!res) return;
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.detail || "Login failed");
+    }
+
+    const data: LoginResponse = await res.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error at login: ", error);
   }
-
-  const data: LoginResponse = await res.json();
-
-  // localStorage.setItem("access_token", data.access_token);
-  localStorage.setItem("user_email", data.user_email);
-  localStorage.setItem("user_id", data.user_id);
-  localStorage.setItem("roles", JSON.stringify(data.roles));
-
-  return data;
 }
 
 export async function logOut() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/logout`, {
+  const init = {
     method: "POST",
-    credentials: "include",
-  });
+  };
+
+  const res = await apiFetch("/users/logout", init);
+
+  if (!res) return;
 
   if (!res.ok) {
     let errorMessage = "Something went wrong";

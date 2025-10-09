@@ -4,8 +4,9 @@ import jwt from "jsonwebtoken";
 
 export const config = {
   runtime: "nodejs",
+  // matcher: ["/((?!login|api/auth|_next/static|_next/image|favicon.ico).*)"],
   matcher: [
-    "/((?!login|api/auth|_next/static|_next/image|favicon.ico).*)",
+    "/((?!api/auth|_next/static|_next/image|favicon.ico|.well-known|.*\\.png|.*\\.jpg|.*\\.jpeg|.*\\.svg|.*\\.webp|.*\\.gif).*)",
   ],
 };
 
@@ -21,16 +22,24 @@ function isTokenExpired(token: string): boolean {
 }
 
 export async function middleware(request: NextRequest) {
-  const { cookies, url } = request;
+  const { cookies, url, nextUrl } = request;
   const token = cookies.get("token")?.value;
 
-  if (!token) {
-    const loginUrl = new URL("/login", url);
+  const loginUrl = new URL("/login", url);
+  const rootUrl = new URL("/", nextUrl);
+
+  // prevent logged-in users from visiting /login
+  if (token && nextUrl.pathname === "/login") {
+    return NextResponse.redirect(rootUrl);
+  }
+
+  // no token → redirect to /login if not already there
+  if (!token && nextUrl.pathname !== "/login") {
     return NextResponse.redirect(loginUrl);
   }
 
-  if (isTokenExpired(token)) {
-    const loginUrl = new URL("/login", url);
+  // token expired → clear cookie and redirect to login
+  if (token && isTokenExpired(token)) {
     const resp = NextResponse.redirect(loginUrl);
     resp.cookies.set("token", "", { maxAge: 0 });
     return resp;
