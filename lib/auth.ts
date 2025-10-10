@@ -63,13 +63,10 @@ export async function login(email: string, password: string) {
 }
 
 export async function logOut() {
-  const init = {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/logout`, {
     method: "POST",
-  };
-
-  const res = await apiFetch("/users/logout", init);
-
-  if (!res) return;
+    credentials: "include",
+  });
 
   if (!res.ok) {
     let errorMessage = "Something went wrong";
