@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
+import { jwtVerify } from "jose";
+import { Roles, routes } from "./lib/roles";
 
 export const config = {
   runtime: "nodejs",
@@ -10,40 +12,87 @@ export const config = {
   ],
 };
 
-function isTokenExpired(token: string): boolean {
-  try {
-    const payload = jwt.decode(token) as { exp?: number } | null;
-    if (!payload || !payload.exp) return true;
-    const now = Date.now() / 1000;
-    return payload.exp < now;
-  } catch (_) {
-    return true;
-  }
-}
+export type TokenPayload = {
+  sub: string;
+  user_id: string;
+  roles: string[];
+  exp: number;
+};
 
 export async function middleware(request: NextRequest) {
   const { cookies, url, nextUrl } = request;
-  const token = cookies.get("token")?.value;
+  const path = nextUrl.pathname;
+
+  const tokenCookieKey = "RESTOApiToken";
+  const token = cookies.get(tokenCookieKey)?.value;
 
   const loginUrl = new URL("/login", url);
-  const rootUrl = new URL("/", nextUrl);
+  const redirectToLogin = () => NextResponse.redirect(loginUrl);
 
-  // prevent logged-in users from visiting /login
-  if (token && nextUrl.pathname === "/login") {
-    return NextResponse.redirect(rootUrl);
-  }
+  const rootUrl = new URL("/", nextUrl);
+  const redirectToRoot = () => NextResponse.redirect(rootUrl);
 
   // no token → redirect to /login if not already there
-  if (!token && nextUrl.pathname !== "/login") {
-    return NextResponse.redirect(loginUrl);
+  if (!token && path !== "/login") {
+    return redirectToLogin();
   }
 
-  // token expired → clear cookie and redirect to login
-  if (token && isTokenExpired(token)) {
-    const resp = NextResponse.redirect(loginUrl);
-    resp.cookies.set("token", "", { maxAge: 0 });
-    return resp;
+  if (token) {
+    const secret = process.env.NEXT_PUBLIC_API_VALIDATION_KEY!;
+    const verifiedToken = await verifyToken(token, secret);
+
+    // Skip Next.js internals, static files, or API routes
+    if (path.startsWith("/_next") || path.startsWith("/api")) {
+      return NextResponse.next();
+    }
+
+    // Find matching route config
+    const route = routes.find((r) => r.href === path);
+
+    if (!route) return NextResponse.next(); // if route not defined, allow
+
+    // invalid token or expired
+    if (!verifiedToken.valid || !verifiedToken.payload) redirectToLogin();
+
+    const validToken = verifiedToken.payload as TokenPayload;
+
+    // prevent logged-in users from visiting /login
+    if (path === "/login") {
+      return redirectToRoot();
+    }
+
+    const roles = validToken.roles || [];
+
+    const hasAccess =
+      roles.includes(Roles.ADMIN) ||
+      !route.rolesAllowed ||
+      route.rolesAllowed.some((role) => roles.includes(role));
+
+    if (!hasAccess) {
+      return redirectToRoot();
+    }
+
+    return NextResponse.next();
   }
 
-  return NextResponse.next();
+  // TODO -> check middleware logic
+  // return NextResponse.next();
+}
+
+async function verifyToken(token: string, secret: string) {
+  try {
+    const publicKeyPem = `${process.env.NEXT_PUBLIC_API_VALIDATION_KEY}`;
+    const { payload } = await jwtVerify(
+      token,
+      new TextEncoder().encode(secret),
+      {
+        algorithms: ["HS256"],
+      }
+    );
+
+    return { valid: true, payload: payload as TokenPayload };
+  } catch (err: any) {
+    const expired = err?.message?.includes("JWT expired") || false;
+    return { valid: false, payload: null, expired };
+  }
 }

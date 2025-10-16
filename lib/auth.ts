@@ -6,56 +6,25 @@ export interface LoginResponse {
   roles: string[];
 }
 
-export async function apiFetch(path: RequestInfo, init: RequestInit = {}) {
-  const uri = `${process.env.NEXT_PUBLIC_API_URL}${path}`;
+export async function login(email: string, password: string) {
+  const uri = `${process.env.NEXT_PUBLIC_API_URL}/users/login`;
 
   try {
     const res = await fetch(uri, {
-      ...init,
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
-        ...init.headers,
       },
+      body: JSON.stringify({ email, password }),
       credentials: "include",
     });
 
-    if (res.status === 401) {
-      window.location.href = "/login";
-      return res;
-    }
-
-    if (res.status === 403) {
-      window.location.href = "/";
-      return;
-    }
-
-    return res;
-  } catch (error) {
-    console.error("error at apiFetch: ", error);
-  }
-}
-
-export async function login(email: string, password: string) {
-  const init: RequestInit = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email, password }),
-  };
-
-  try {
-    const res = await apiFetch("/users/login", init);
-
-    if (!res) return;
-
     if (!res.ok) {
-      const errorData = await res.json();
+      const errorData = await res.json().catch(() => ({}));
       throw new Error(errorData.detail || "Login failed");
     }
 
     const data: LoginResponse = await res.json();
-
     return data;
   } catch (error) {
     console.error("Error at login: ", error);
@@ -63,7 +32,9 @@ export async function login(email: string, password: string) {
 }
 
 export async function logOut() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/logout`, {
+  const uri = `${process.env.NEXT_PUBLIC_API_URL}/users/logout`;
+
+  const res = await fetch(uri, {
     method: "POST",
     credentials: "include",
   });
