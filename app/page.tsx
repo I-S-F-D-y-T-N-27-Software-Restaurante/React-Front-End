@@ -32,18 +32,3 @@ export default function Inicio() {
     </>
   );
 }
-
-// export function CardLink({ href, children, className = "" }: CardLinkProps) {
-//   return (
-//     <Link href={href} className="block">
-//       <div
-//         className={`w-100 h-80 rounded-md shadow-md flex items-center justify-center select-none bg-[#dcdc2a] hover:brightness-95 transition-all cursor-pointer ${className}`}
-//         role="button"
-//       >
-//         <span className="text-white font-extrabold text-3xl tracking-wider uppercase">
-//           {children}
-//         </span>
-//       </div>
-//     </Link>
-//   );
-// }

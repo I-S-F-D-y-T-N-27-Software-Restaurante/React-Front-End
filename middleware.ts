@@ -46,6 +46,10 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next();
     }
 
+    if (path.startsWith("/login")) {
+      return redirectToRoot();
+    }
+
     // Find matching route config
     const route = routes.find((r) => r.href === path);
 
