@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# App RESTO Frontend
 
 ## Getting Started
 
-First, run the development server:
+### First, install dependencies
+
+```bash
+npm install
+#or
+pnpm install
+```
+
+### Second, duplicate _env.example and rename it to .env
+
+### After, run the development server
 
 ```bash
 npm run dev
 # or
-yarn dev
-# or
 pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Login Test Data
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+#### Seed Users and Roles
 
-## Learn More
+##### These users are preloaded for testing. Each has password pass123
 
-To learn more about Next.js, take a look at the following resources:
+**Seeded Users and Roles**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Alice
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+* Email: [alice@example.com](mailto:alice@example.com)
+* Roles: Cashier, Waiter, Cook
 
-## Deploy on Vercel
+Bob
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+* Email: [bob@example.com](mailto:bob@example.com)
+* Roles: Waiter
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Charlie
+
+* Email: [charlie@example.com](mailto:charlie@example.com)
+* Roles: Cook
+
+Diana
+
+* Email: [diana@example.com](mailto:diana@example.com)
+* Roles: Cashier
+
+Evan
+
+* Email: [evan@example.com](mailto:evan@example.com)
+* Roles: Admin only (no other roles assigned)
+
+**Notes**
+
+* Roles determine access to different parts of the app (e.g., Waiter sees `/mesas`, Cashier sees `/pedidos`).
+* Evan has full admin privileges but no specific employee profiles.
+
+---
+
+This format clearly shows which users exist, their emails, and their roles for front-end logic.
