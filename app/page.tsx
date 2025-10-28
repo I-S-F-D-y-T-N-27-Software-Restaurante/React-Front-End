@@ -1,60 +1,34 @@
-import Link from 'next/link'
-import Navbar from '@/components/navbar'
-
+import Link from "next/link";
+import { Navbar } from "@/components/Navbar";
+import { Role, routes } from "../lib/roles";
+import { UserProvider, useUser } from "../hooks/useRoleContext";
+import { Spinner } from "../components/Spinner";
+import { CardLink } from "../components/CardLink";
 
 export default function Inicio() {
   return (
     <>
-    <Navbar />
-      <main className="min-h-screen bg-white flex items-center justify-center align-center">
+      <Navbar />
+
+      <main className="min-h-screen bg-white flex items-center justify-center">
         <div className="w-full max-w-5xl px-5 py-20">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-40 gap-y-10 justify-items-center">
-            <Link href="/pedidos" className="block">
-              <div
-                className="w-100 h-80 rounded-md shadow-md flex items-center justify-center select-none bg-[#dcdc2a] hover:brightness-95 transition-all cursor-pointer"
-                role="button"
-              >
-                <span className="text-white font-extrabold text-3xl tracking-wider uppercase">
-                  Pedidos
-                </span>
-              </div>
-            </Link>
-
-            <Link href="/mesas" className="block" >
-              <div
-                className=" w-100 h-80  rounded-md shadow-md flex items-center justify-center select-none bg-[#dcdc2a] hover:brightness-95 transition-all cursor-pointer"
-                role="button"
-              >
-                <span className="text-white font-extrabold text-3xl tracking-wider uppercase">
-                  Mesas
-                </span>
-              </div>
-            </Link>
-
-            <Link href="/inventario" className="block">
-            <div
-              className="w-100 h-80  rounded-md shadow-md flex items-center justify-center select-none bg-[#dcdc2a] hover:brightness-95 transition-all cursor-pointer"
-              role="button"
-            >
-              <span className="text-white font-extrabold text-3xl tracking-wider uppercase">
-                Inventario
-              </span>
+          <UserProvider>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-40 gap-y-10 justify-items-center">
+              {routes.map((route) =>
+                route.href === "/" ? null : (
+                  <CardLink
+                    key={route.href}
+                    href={route.href}
+                    rolesAllowed={route.rolesAllowed}
+                  >
+                    {route.label}
+                  </CardLink>
+                )
+              )}
             </div>
-          </Link>
-
-          <Link href="/usuarios" className="block">
-            <div
-              className="w-100 h-80  rounded-md shadow-md flex items-center justify-center select-none bg-[#dcdc2a] hover:brightness-95 transition-all cursor-pointer"
-              role="button"
-            >
-              <span className="text-white font-extrabold text-3xl tracking-wider uppercase">
-                Usuarios
-              </span>
-            </div>
-          </Link>
+          </UserProvider>
         </div>
-      </div>
-    </main>
-  </>
-  )
+      </main>
+    </>
+  );
 }

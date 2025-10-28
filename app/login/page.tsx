@@ -1,46 +1,60 @@
-
-
+"use client";
+import { useState } from "react";
+import { login } from "../../lib/auth";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-    return (
-    <>
-    <div className="min-h-screen bg-white flex items-center justify-center ">
-        <div className="w-full max-w-3xl min-h-[500px] px-5 ">
-                <div className="flex flex-col items-center align-center justify-center">
-                    <div className="mb-5">
-                        <img
-                        src="/loginuser.png"
-                        alt="icono de usuario"
-                        className="w-32 h-32 rounded-full"
-                        />
-                    </div>
-                    <h1 className="text-4xl mb-10 font-normal">Iniciar sesión</h1>
-                    <form className="w-full flex flex-col items-center">
-                    <div className="w-full max-w-xl mb-6 text-1xl">
-                        <input
-                            placeholder="Usuario"
-                            className="w-full h-12 px-4 text-1xl placeholder-gray-400 rounded-lg bg-[#e6e6e6] border border-gray-200 shadow-[0_2px_0_rgba(0,0,0,0.08)] focus:outline-none"
-                        />
-                    </div>
-                    <div className="w-full max-w-xl mb-10 text-1xl">
-                        <input
-                            placeholder="Contraseña"
-                            type="password"
-                            className="w-full h-12 px-4 text-1xl placeholder-gray-400 rounded-lg bg-[#e6e6e6] border border-gray-200 shadow-[0_2px_0_rgba(0,0,0,0.08)] focus:outline-none"
-                        />
-                    </div>
-                    <div className="">
-                        <button
-                            type="submit"
-                            className="w-60 h-12 rounded-lg text-white text-1xl cursor-pointer hover:opacity-95 bg-blue-500"
-                            >
-                        Ingresar
-                        </button>
-                    </div>
-                    </form>
-                </div>
-            </div>
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    try {
+      const user = await login(email, password);
+      router.push("/");
+    } catch (err: any) {
+      alert(err.message);
+    }
+  }
+
+  return (
+    <main className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="flex flex-col items-center align-center justify-center">
+        <div className="mb-5">
+          <img
+            src="/loginuser.png"
+            alt="icono de usuario"
+            className="w-32 h-32 rounded-full"
+          />
         </div>
-    </>
-    );
+        <h1 className="text-4xl mb-10 font-normal">Iniciar sesión</h1>
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white p-6 rounded-lg shadow-md w-80 flex flex-col gap-3"
+        >
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="border p-2 rounded"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="border p-2 rounded"
+          />
+          <button
+            type="submit"
+            className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+          >
+            Login
+          </button>
+        </form>
+      </div>
+    </main>
+  );
 }
