@@ -13,6 +13,7 @@ import {
   fetchAllTables,
 } from "../lib/fetch";
 import { TableSpinner } from "./TableSkeleton";
+import {translateTableStatus} from '../lib/utils';
 
 export function TableManager() {
   const [tables, setTables] = useState<RestaurantTable[]>([]);
@@ -49,6 +50,7 @@ export function TableManager() {
 
   const closePopup = () => setCreating(false);
 
+
   return (
     <>
       <div className="p-4">
@@ -66,7 +68,7 @@ export function TableManager() {
               }`}
             >
               <div className="text-lg font-semibold">Mesa {table.id}</div>
-              <div className="text-sm">{table.status.toLocaleUpperCase()}</div>
+              <div className="text-sm">{translateTableStatus(table.status).toLocaleUpperCase()}</div>
             </div>
           ))}
 
@@ -74,7 +76,7 @@ export function TableManager() {
             className="p-24 rounded-lg bg-gray-400 cursor-pointer text-center text-white flex items-center justify-center border-2 border-dashed border-gray-600 hover:bg-gray-500 transition"
             onClick={addTable}
           >
-            Add table
+          + Nueva Mesa
           </div>
         </div>
 

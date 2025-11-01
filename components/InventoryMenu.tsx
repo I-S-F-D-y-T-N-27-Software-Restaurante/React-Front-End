@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MenuItem } from "../lib/types";
+import { MenuItem, MenuItemDTO, CategoryOptions } from "../lib/types";
 import {
   fetchMenuItems,
   createMenuItemFetch,
   deleteMenuItemFetch,
+  updateMenuItemFetch,
 } from "../lib/fetch";
 import { menuItemMock } from "../lib/temp";
 import { Plus, Trash2 } from "lucide-react";
@@ -19,9 +20,7 @@ export function MenuDashboard() {
   const loadMenuItems = async () => {
     setLoading(true);
     const data = await fetchMenuItems();
-    // TODO -> remove this when removing mock
-    // setMenuItems(data);
-    setMenuItems(menuItemMock);
+    setMenuItems(data);
     setLoading(false);
   };
 
@@ -38,18 +37,20 @@ export function MenuDashboard() {
     }
   };
 
-  const handleSave = async (
-    item: Omit<MenuItem, "id" | "created_at" | "updated_at">
-  ) => {
-    await createMenuItemFetch(item);
+  const handleSave = async (item: MenuItemDTO, id?: number) => {
+    if (id) {
+      await updateMenuItemFetch(id, item);
+    } else {
+      await createMenuItemFetch(item);
+    }
     setCreating(false);
+    setSelectedItem(null);
     loadMenuItems();
   };
 
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Items</h1>
         <button
           onClick={handleAdd}
           className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg transition-all duration-200"
@@ -62,27 +63,29 @@ export function MenuDashboard() {
       {loading ? (
         <div className="text-center py-20">Loading...</div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-80">
           {menuItems.map((item) => (
             <div
               key={item.id}
-              className="bg-black/90 text-white p-5 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-200"
+              className="bg-black/90 text-white p-5 min-w-xs rounded-xl shadow-md hover:shadow-xl transition-shadow duration-200"
             >
-              <h2 className="text-xl font-semibold mb-1">{item.name}</h2>
+              <h2 className="text-2xl font-semibold mb-1">{item.name}</h2>
               {item.description && (
                 <p className="text-gray-300 text-sm mb-2">{item.description}</p>
               )}
-              <p className="font-bold text-lg mb-1">${item.price.toFixed(2)}</p>
+              <p className="font-bold text-xl mb-1 mt-5">
+                ${Number(item.price).toFixed(2)}
+              </p>
               <p
                 className={`font-medium mb-1 ${
                   item.available ? "text-green-500" : "text-red-500"
                 }`}
               >
-                {item.available ? "Available" : "Unavailable"}
+                {item.available ? "Disponible" : "No disponible"}
               </p>
               {item.category && (
-                <p className="text-gray-400 text-sm mb-2">
-                  Category: {item.category}
+                <p className="text-gray-400 text-lg mb-2">
+                  Categoria: {item.category}
                 </p>
               )}
 
@@ -106,14 +109,18 @@ export function MenuDashboard() {
       )}
 
       {creating && (
-        <MenuItemPopup onClose={() => setCreating(false)} onSave={handleSave} />
+        <MenuItemPopup
+          onClose={() => setCreating(false)}
+          onSave={handleSave}
+          isCreating={creating}
+        />
       )}
 
       {selectedItem && (
         <MenuItemPopup
           item={selectedItem}
           onClose={() => setSelectedItem(null)}
-          onSave={handleSave}
+          onSave={(data) => handleSave(data, selectedItem.id)}
         />
       )}
     </div>
@@ -123,10 +130,16 @@ export function MenuDashboard() {
 type MenuItemPopupProps = {
   item?: MenuItem;
   onClose: () => void;
-  onSave: (item: Omit<MenuItem, "id" | "created_at" | "updated_at">) => void;
+  onSave: (item: MenuItemDTO, id?: number) => void;
+  isCreating?: Boolean;
 };
 
-function MenuItemPopup({ item, onClose, onSave }: MenuItemPopupProps) {
+function MenuItemPopup({
+  item,
+  onClose,
+  onSave,
+  isCreating,
+}: MenuItemPopupProps) {
   const [name, setName] = useState(item?.name || "");
   const [description, setDescription] = useState(item?.description || "");
   const [price, setPrice] = useState(item?.price || 0);
@@ -134,57 +147,81 @@ function MenuItemPopup({ item, onClose, onSave }: MenuItemPopupProps) {
   const [category, setCategory] = useState(item?.category || "");
 
   const handleSave = () => {
-    onSave({
-      name,
-      description,
-      price,
-      available,
-      category: category || null,
-    });
+    onSave(
+      {
+        name,
+        description,
+        price,
+        available,
+        category: category || null,
+      },
+      item?.id
+    );
   };
 
   return (
     <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 space-y-4">
         <h2 className="text-2xl font-bold text-center">
-          {item ? "Editar" : "Crear"}
+          {isCreating ? "Crear" : "Editar"}
         </h2>
 
-        <div className="flex flex-col space-y-2">
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Name"
-            className="border rounded px-3 py-2"
-          />
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Description"
-            className="border rounded px-3 py-2 resize-none"
-          />
-          <input
-            type="number"
-            value={price}
-            onChange={(e) => setPrice(Number(e.target.value))}
-            placeholder="Price"
-            className="border rounded px-3 py-2"
-          />
-          <input
-            type="text"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            placeholder="Category"
-            className="border rounded px-3 py-2"
-          />
+        <div className="flex flex-col space-y-3">
+          <div className="flex flex-col">
+            <label className="font-medium text-gray-700">Name</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className={`border rounded px-3 py-2 mt-1 w-full ${
+                !isCreating ? "bg-gray-200 cursor-not-allowed" : ""
+              }`}
+              disabled={!isCreating}
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label className="font-medium text-gray-700">Description</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="border rounded px-3 py-2 mt-1 w-full resize-none"
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label className="font-medium text-gray-700">Price</label>
+            <input
+              type="number"
+              value={price}
+              onChange={(e) => setPrice(Number(e.target.value))}
+              className="border rounded px-3 py-2 mt-1 w-full"
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label className="font-medium text-gray-700">Category</label>
+            <select
+              value={category || ""}
+              onChange={(e) => setCategory(e.target.value)}
+              className="border rounded px-3 py-2 mt-1 w-full"
+            >
+              <option value="">Selecciona una categoria</option>
+              {Object.entries(CategoryOptions).map(([key, label]) => (
+                <option key={key} value={key}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <label className="flex items-center gap-2 mt-2">
             <input
               type="checkbox"
               checked={available}
               onChange={(e) => setAvailable(e.target.checked)}
             />
-            Available
+            Disponible
           </label>
         </div>
 

@@ -62,7 +62,6 @@ export function NavLink({ href, label, Icon, rolesAllowed }: AppRoute) {
     return <div className={linkClass}>{linkContent}</div>;
   }
 
-  // Normal clickable link
   return (
     <Link href={href} className={linkClass}>
       {linkContent}

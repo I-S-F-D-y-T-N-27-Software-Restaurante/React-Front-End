@@ -75,7 +75,7 @@ function UserPopup({ onClose }: { onClose: () => void }) {
   return (
     <Wrapper>
       <div className="font-semibold text-lg truncate">
-        User ID {user?.user_id}
+        Empleado:
       </div>
       <div className="text-sm text-gray-500 truncate my-1">
         {user?.user_email}
