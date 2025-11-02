@@ -1,10 +1,11 @@
 import { CreateRestaurantTableDto } from "../components/Tables";
-import { Role, Roles } from "./roles";
 import {
   MenuItem,
   MenuItemDTO,
   RestaurantTable,
   RestaurantTableStatusType,
+  Role,
+  Roles,
   UpdateMenuItemDTO,
   User,
   UserDTO,
@@ -194,3 +195,14 @@ export async function fetchUsersWithRoles(): Promise<User[]> {
 
   return formatedData;
 }
+
+export async function fetchMenuItemsByCategory(category: string) {
+  const uri = `${process.env.NEXT_PUBLIC_API_URL}/menu/search/${category}`;
+  const res = await fetch(uri, { credentials: "include" });
+  if (!res.ok) {
+    logFailedFetch(res);
+    return [];
+  }
+  return res.json();
+}
+

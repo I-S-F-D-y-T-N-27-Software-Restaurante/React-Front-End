@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { User, Home, Users, Table, ClipboardList, Box } from "lucide-react";
 import { logOut } from "../lib/auth";
 import { UserMenu } from "./UserMenu";
-import { AppRoute, routes } from "../lib/roles";
+import { AppRoute, routes } from "../lib/routes";
 import { UserProvider, useUser } from "../hooks/useRoleContext";
 import { Spinner } from "./Spinner";
 import { Span } from "next/dist/trace";

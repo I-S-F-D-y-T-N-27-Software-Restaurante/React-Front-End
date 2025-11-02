@@ -1,13 +1,5 @@
 import { User, Home, Users, Table, ClipboardList, Box } from "lucide-react";
-
-export type Role = (typeof Roles)[keyof typeof Roles];
-
-export const Roles = {
-  WAITER: "waiter",
-  COOK: "cook",
-  CASHIER: "cashier",
-  ADMIN: "admin",
-} as const;
+import {Role, Roles} from './types';
 
 export type AppRoute = {
   href: string;

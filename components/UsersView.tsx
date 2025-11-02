@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { User } from "../lib/types";
-import { Role, Roles } from "../lib/roles";
+import { Role, Roles, User } from "../lib/types";
 import { fetchUsersWithRoles } from "../lib/fetch";
 
 export function UsersView() {

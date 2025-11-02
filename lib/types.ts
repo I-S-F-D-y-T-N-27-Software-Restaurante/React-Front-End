@@ -1,4 +1,11 @@
-import {Role} from './roles';
+export type Role = (typeof Roles)[keyof typeof Roles];
+
+export const Roles = {
+  WAITER: "waiter",
+  COOK: "cook",
+  CASHIER: "cashier",
+  ADMIN: "admin",
+} as const;
 
 export type User = {
   id: number;
@@ -17,7 +24,6 @@ export type UserDTO = {
   cook_profile?: { id: number; user_id: number } | null;
   cashier_profile?: { id: number; user_id: number } | null;
 };
-
 
 export const OrderStatus = {
   UNASSIGNED: "unassigned",
@@ -86,3 +92,15 @@ export type MenuItemDTO = Omit<MenuItem, "id" | "created_at" | "updated_at">;
 export type UpdateMenuItemDTO = Partial<
   Pick<MenuItem, "description" | "price" | "available" | "category">
 >;
+
+export type Order = {
+  id: number
+  table_id: number
+  waiter_id: number
+  total: number
+  menu_items: MenuItem[]
+  status: OrderStatusType
+  created_at: string
+  updated_at: string
+  deleted_at: string | null
+}
