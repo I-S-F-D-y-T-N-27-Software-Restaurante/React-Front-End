@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
-import { UsersView } from "@/components/Usuarios";
+import { UsersView } from "@/components/UsersView";
 
 export default function Usuarios() {
   return (

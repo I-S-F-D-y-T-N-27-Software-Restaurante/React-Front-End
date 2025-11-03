@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
-import { Role, routes } from "../lib/roles";
 import { UserProvider, useUser } from "../hooks/useRoleContext";
 import { Spinner } from "../components/Spinner";
 import { CardLink } from "../components/CardLink";
+import {routes} from '../lib/routes';
 
 export default function Inicio() {
   return (

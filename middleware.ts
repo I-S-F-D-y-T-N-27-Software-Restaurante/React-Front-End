@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
 import { jwtVerify } from "jose";
-import { Roles, routes } from "./lib/roles";
+import {routes} from './lib/routes';
+import {Roles} from './lib/types';
 
 export const config = {
   runtime: "nodejs",
