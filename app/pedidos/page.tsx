@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
+import { VisualizeOrders } from "../../components/ViewOrders";
 
 export default function Page() {
   return (
@@ -9,7 +10,7 @@ export default function Page() {
         <h1 className="text-4xl font-black text-gray-800 tracking-tight drop-shadow-lg">
           Pedidos
         </h1>
-        <h2>Work in progress</h2>
+        <VisualizeOrders />
       </main>
     </>
   );

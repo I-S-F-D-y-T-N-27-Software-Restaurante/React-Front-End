@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useUser } from "../hooks/useRoleContext";
-import { Role } from "../lib/roles";
 import { Spinner } from "./Spinner";
+import {Role} from '../lib/types';
 
 interface CardLinkProps {
   href: string;
