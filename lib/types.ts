@@ -69,7 +69,7 @@ export const CategoryOptions = {
   bebida: "Bebida",
   ensalada: "Ensalada",
   sopa: "Sopa",
-  acompañamiento: "Acompañamiento",
+  acompañamiento: "Acompanamiento",
   snack: "Snack",
   especial: "Especial",
 } as const;

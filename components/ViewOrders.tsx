@@ -99,7 +99,7 @@ export function VisualizeOrders() {
             {group.map((order) => (
               <div key={order.id} className="bg-white p-4 rounded-lg shadow">
                 <div className="flex justify-between mb-2">
-                  <p className="font-semibold">Order #{order.id}</p>
+                  <p className="font-semibold">Identificador pedido: {order.id}</p>
                   <p className="text-sm text-gray-500">
                     Table {order.table_id}
                   </p>

@@ -241,6 +241,16 @@ export function ViewTablePopup({
               </div>
             </div>
 
+            <div className="flex justify-between text-md font-medium text-gray-800 mt-2 border-t pt-2">
+              <span>Total</span>
+              <span>
+                $
+                {orderItems
+                  .reduce((sum, item) => sum + Number(item.price), 0)
+                  .toFixed(2)}
+              </span>
+            </div>
+
             <button
               onClick={handleCreateOrder}
               disabled={orderItems.length === 0}

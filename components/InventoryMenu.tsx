@@ -49,7 +49,7 @@ export function MenuDashboard() {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-6 max-w-[1280px]">
       <div className="flex justify-between items-center mb-6">
         <button
           onClick={handleAdd}
@@ -63,11 +63,11 @@ export function MenuDashboard() {
       {loading ? (
         <div className="text-center py-20">Loading...</div>
       ) : (
-        <div className="flex flex-wrap justify-start gap-5 shrink">
+        <div className="flex flex-wrap justify-start gap-2 shrink">
           {menuItems.map((item) => (
             <div
               key={item.id}
-              className="bg-black/90 text-white p-5 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-200 min-w-sm"
+              className="bg-black/90 text-white p-5 w-full rounded-xl shadow-md hover:shadow-xl transition-shadow duration-200 max-w-sm"
             >
               <h2 className="text-2xl font-semibold mb-1">{item.name}</h2>
               {item.description && (
