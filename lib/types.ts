@@ -34,6 +34,17 @@ export const OrderStatus = {
   CANCELED: "canceled",
 } as const;
 
+export type OrderStatusType = (typeof OrderStatus)[keyof typeof OrderStatus];
+
+export const ORDER_STATUS_TRANSLATIONS: Record<OrderStatusType, string> = {
+  unassigned: "Sin asignar",
+  pending: "Pendiente",
+  in_progress: "En progreso",
+  ready: "Listo",
+  delivered: "Entregado",
+  canceled: "Cancelado",
+}
+
 export const RestaurantTableStatus = {
   AVAILABLE: "available",
   OCCUPIED: "occupied",
@@ -41,6 +52,7 @@ export const RestaurantTableStatus = {
   CLEANING: "cleaning",
   MAINTENANCE: "maintenance",
 } as const;
+
 
 export const STATUS_TRANSLATIONS: Record<RestaurantTableStatusType, string> = {
   available: "Disponible",
@@ -61,8 +73,6 @@ export const CategoryOptions = {
   snack: "Snack",
   especial: "Especial",
 } as const;
-
-export type OrderStatusType = (typeof OrderStatus)[keyof typeof OrderStatus];
 
 export type RestaurantTableStatusType =
   (typeof RestaurantTableStatus)[keyof typeof RestaurantTableStatus];
@@ -94,13 +104,18 @@ export type UpdateMenuItemDTO = Partial<
 >;
 
 export type Order = {
-  id: number
-  table_id: number
-  waiter_id: number
-  total: number
-  menu_items: MenuItem[]
-  status: OrderStatusType
-  created_at: string
-  updated_at: string
-  deleted_at: string | null
-}
+  id: number;
+  table_id: number;
+  waiter_id: number;
+  total: number;
+  menu_items: MenuItem[];
+  status: OrderStatusType;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+};
+
+export type UpdateOrderStatusDto = {
+  id: number;
+  status: OrderStatusType;
+};
